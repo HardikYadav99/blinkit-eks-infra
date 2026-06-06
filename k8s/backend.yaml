@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: blinkit-backend
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: blinkit-backend
+  template:
+    metadata:
+      labels:
+        app: blinkit-backend
+    spec:
+      containers:
+      - name: backend
+        image: 746486152802.dkr.ecr.us-east-1.amazonaws.com/blinkit-backend:v1
+        ports:
+        - containerPort: 8090
+        env:
+        - name: PORT
+          value: "8090"
+        - name: MONGO_URI
+          valueFrom:
+            secretKeyRef:
+              name: mongodb-credentials
+              key: MONGO_URI
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: blinkit-backend-svc
+  namespace: default
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 8090
+    targetPort: 8090
+  selector:
+    app: blinkit-backend
