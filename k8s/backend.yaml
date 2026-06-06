@@ -45,6 +45,21 @@ spec:
             secretKeyRef:
               name: jwt-secrets
               key: SECRET_KEY_ACCESS_TOKEN
+        - name: VITE_STRIPE_PUBLIC_KEY
+          valueFrom:
+            secretKeyRef:
+              name: stripe-secrets
+              key: VITE_STRIPE_PUBLIC_KEY
+        - name: STRIPE_SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              name: stripe-secrets
+              key: STRIPE_SECRET_KEY
+        - name: STRIPE_ENPOINT_WEBHOOK_SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              name: stripe-secrets
+              key: STRIPE_ENPOINT_WEBHOOK_SECRET_KEY
 ---
 apiVersion: v1
 kind: Service
