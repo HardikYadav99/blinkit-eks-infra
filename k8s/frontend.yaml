@@ -18,6 +18,14 @@ spec:
         image: 746486152802.dkr.ecr.us-east-1.amazonaws.com/blinkit-frontend:v50
         ports:
         - containerPort: 80
+        env:
+        - name: VITE_API_URI
+          value: "http://a84425bbd234b4934ab337ebfaf82997-58824070.us-east-1.elb.amazonaws.com:8090"
+        - name: VITE_STRIPE_PUBLIC_KEY
+          valueFrom:
+            secretKeyRef:
+              name: stripe-credentials
+              key: VITE_STRIPE_PUBLIC_KEY
 ---
 apiVersion: v1
 kind: Service
