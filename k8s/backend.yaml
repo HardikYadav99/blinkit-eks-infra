@@ -26,6 +26,9 @@ spec:
             secretKeyRef:
               name: mongodb-credentials
               key: MONGO_URI
+        # --- ADDED FOR CORS HANDSHAKE ---
+        - name: FRONTEND_URL  
+          value: "http://a880f442141974bdb99badbaf0c65b25-634400457.us-east-1.elb.amazonaws.com"
 ---
 apiVersion: v1
 kind: Service
