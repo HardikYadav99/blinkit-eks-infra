@@ -15,6 +15,7 @@ spec:
     spec:
       containers:
       - name: backend
+        # Your latest image tag built by Jenkins
         image: 746486152802.dkr.ecr.us-east-1.amazonaws.com/blinkit-backend:v48
         ports:
         - containerPort: 8090
@@ -26,6 +27,12 @@ spec:
             secretKeyRef:
               name: mongodb-credentials
               key: MONGO_URI
+        # Added the missing Resend API secret here
+        - name: RESEND_API
+          valueFrom:
+            secretKeyRef:
+              name: resend-credentials
+              key: RESEND_API
         - name: FRONTEND_URL  
           value: "http://a880f442141974bdb99badbaf0c65b25-634400457.us-east-1.elb.amazonaws.com"
 ---
@@ -41,7 +48,3 @@ spec:
     targetPort: 8090
   selector:
     app: blinkit-backend
-
-
-
-    #this is comment to force update repo, another one 
