@@ -11,30 +11,40 @@ spec:
   template:
     metadata:
       labels:
+        app: blinkit-frontend # Ensure this matches your Service selector
         app: blinkit-backend
     spec:
       containers:
       - name: backend
-        # Your latest image tag built by Jenkins
         image: 746486152802.dkr.ecr.us-east-1.amazonaws.com/blinkit-backend:v48
         ports:
         - containerPort: 8090
         env:
         - name: PORT
           value: "8090"
+        - name: FRONTEND_URL  
+          value: "http://a880f442141974bdb99badbaf0c65b25-634400457.us-east-1.elb.amazonaws.com"
+        # --- SECURE SECRET REFERENCES ---
         - name: MONGODB_URI
           valueFrom:
             secretKeyRef:
               name: mongodb-credentials
               key: MONGO_URI
-        # Added the missing Resend API secret here
         - name: RESEND_API
           valueFrom:
             secretKeyRef:
               name: resend-credentials
               key: RESEND_API
-        - name: FRONTEND_URL  
-          value: "http://a880f442141974bdb99badbaf0c65b25-634400457.us-east-1.elb.amazonaws.com"
+        - name: SECRET_KEY_REFRESH_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: jwt-secrets
+              key: SECRET_KEY_REFRESH_TOKEN
+        - name: SECRET_KEY_ACCESS_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: jwt-secrets
+              key: SECRET_KEY_ACCESS_TOKEN
 ---
 apiVersion: v1
 kind: Service
