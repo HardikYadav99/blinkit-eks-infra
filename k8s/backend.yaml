@@ -11,7 +11,6 @@ spec:
   template:
     metadata:
       labels:
-        app: blinkit-frontend # Ensure this matches your Service selector
         app: blinkit-backend
     spec:
       containers:
@@ -24,42 +23,23 @@ spec:
           value: "8090"
         - name: FRONTEND_URL  
           value: "http://a880f442141974bdb99badbaf0c65b25-634400457.us-east-1.elb.amazonaws.com"
-        # --- SECURE SECRET REFERENCES ---
+        # Database & Email
         - name: MONGODB_URI
-          valueFrom:
-            secretKeyRef:
-              name: mongodb-credentials
-              key: MONGO_URI
+          valueFrom: { secretKeyRef: { name: mongodb-credentials, key: MONGO_URI } }
         - name: RESEND_API
-          valueFrom:
-            secretKeyRef:
-              name: resend-credentials
-              key: RESEND_API
-        - name: SECRET_KEY_REFRESH_TOKEN
-          valueFrom:
-            secretKeyRef:
-              name: jwt-secrets
-              key: SECRET_KEY_REFRESH_TOKEN
-        - name: SECRET_KEY_ACCESS_TOKEN
-          valueFrom:
-            secretKeyRef:
-              name: jwt-secrets
-              key: SECRET_KEY_ACCESS_TOKEN
+          valueFrom: { secretKeyRef: { name: resend-credentials, key: RESEND_API } }
+        # Stripe
         - name: VITE_STRIPE_PUBLIC_KEY
-          valueFrom:
-            secretKeyRef:
-              name: stripe-secrets
-              key: VITE_STRIPE_PUBLIC_KEY
+          valueFrom: { secretKeyRef: { name: stripe-secrets, key: VITE_STRIPE_PUBLIC_KEY } }
         - name: STRIPE_SECRET_KEY
-          valueFrom:
-            secretKeyRef:
-              name: stripe-secrets
-              key: STRIPE_SECRET_KEY
+          valueFrom: { secretKeyRef: { name: stripe-secrets, key: STRIPE_SECRET_KEY } }
         - name: STRIPE_ENPOINT_WEBHOOK_SECRET_KEY
-          valueFrom:
-            secretKeyRef:
-              name: stripe-secrets
-              key: STRIPE_ENPOINT_WEBHOOK_SECRET_KEY
+          valueFrom: { secretKeyRef: { name: stripe-secrets, key: STRIPE_ENPOINT_WEBHOOK_SECRET_KEY } }
+        # JWT
+        - name: SECRET_KEY_REFRESH_TOKEN
+          valueFrom: { secretKeyRef: { name: jwt-secrets, key: SECRET_KEY_REFRESH_TOKEN } }
+        - name: SECRET_KEY_ACCESS_TOKEN
+          valueFrom: { secretKeyRef: { name: jwt-secrets, key: SECRET_KEY_ACCESS_TOKEN } }
 ---
 apiVersion: v1
 kind: Service
